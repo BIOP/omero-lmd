@@ -1,7 +1,24 @@
 [![License](https://img.shields.io/badge/license-Apache-brightgreen)](https://github.com/BIOP/omero-lmd/blob/main/LICENSE)
 
 # OMERO to LMD
+Scripts to convert OMERO shapes, created from QuPath, to LMD readable shapes.
 
+# Citing
+
+### Code authorship
+
+Author: Rémy Dornier (1)
+
+**Affiliations**
+
+(1) EPFL BioImaging and Optics Platform (BIOP)
+
+### If you use this script, you should cite the following publication
+
+SPARCS, a platform for genome-scale CRISPR screening for spatial cellular phenotypes Niklas Arndt Schmacke, 
+Sophia Clara Maedler, Georg Wallmann, Andreas Metousis, Marleen Berouti, Hartmann Harz, Heinrich Leonhardt, Matthias Mann, 
+Veit Hornung bioRxiv 2023.06.01.542416; doi: https://doi.org/10.1101/2023.06.01.542416
+GitHub: https://github.com/MannLabs/py-lmd
 
 # Workflow
 
@@ -295,21 +312,3 @@ saved under a proper batch folder.
 
  **Microscope related**
  - [Tuto Leica AIVIA](https://www.youtube.com/watch?v=TRTogn6xafk)
-
-
-# Citing
-
-### Code authorship
-
-Author: Rémy Dornier (1)
-
-**Affiliations**
-
-(1) EPFL BioImaging and Optics Platform (BIOP)
-
-### If you use this script, you should cite the following publication
-
-SPARCS, a platform for genome-scale CRISPR screening for spatial cellular phenotypes Niklas Arndt Schmacke, 
-Sophia Clara Maedler, Georg Wallmann, Andreas Metousis, Marleen Berouti, Hartmann Harz, Heinrich Leonhardt, Matthias Mann, 
-Veit Hornung bioRxiv 2023.06.01.542416; doi: https://doi.org/10.1101/2023.06.01.542416
-GitHub: https://github.com/MannLabs/py-lmd

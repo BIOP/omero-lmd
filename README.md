@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/license-Apache-brightgreen)](https://github.com/BIOP/omero-lmd/blob/main/LICENSE)
+
 # OMERO to LMD
 
 
@@ -166,14 +168,14 @@ Once all regions have been annotated and classified
 
 
 <div align="center">
-  <img src="icons/calib-points-slide.png" width="80%">
+  <img src="resources/calib-points-slide.png" width="80%">
 </div>
 
 In order to localize the sample on the LMD microscope, draw **3** calibration points.
 Each point has to be set in the middle of the `T` branches of the reference points, as show below.
 
 <div align="center">
-  <img src="icons/calib-point.png" width="50%">
+  <img src="resources/calib-point.png" width="50%">
 </div>
 
 ### Adding point on OMERO
@@ -208,7 +210,7 @@ create it and load images from OMERO.
 
 
 <div align="center">
-  <img src="icons/calib-point-qupath.png" width="80%">
+  <img src="resources/calib-point-qupath.png" width="80%">
 </div>
 
 > **IMPORTANT WARNING**: ONLY POINTS should be sent to OMERO. If you have loaded all the previous annotations from OMERO or created other ones,
@@ -239,7 +241,7 @@ This section shows the steps to convert OMERO ROIs to LMD readable shapes. Some 
 - Copy the URL
 
 <div align="center">
-  <img src="icons/omero-url.png" width="70%">
+  <img src="resources/omero-url.png" width="70%">
 </div>
 
 #### On a terminal
@@ -271,7 +273,7 @@ python path/to/Export_LMD_ROIs.py
 - Click OK.
 
 <div align="center">
-  <img src="icons/script-gui.png" width="45%">
+  <img src="resources/script-gui.png" width="45%">
 </div>
 
 In the destination folder, and for each selected image, you should have access to:
@@ -281,7 +283,7 @@ In the destination folder, and for each selected image, you should have access t
 saved under a proper batch folder.
 
 <div align="center">
-  <img src="icons/final-xml.png" width="50%">
+  <img src="resources/final-xml.png" width="50%">
 </div>
 
 # Resources

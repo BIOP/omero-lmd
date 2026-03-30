@@ -1,0 +1,47 @@
+*.log
+*.env
+*.lnk
+*.pdf
+*.history
+.*pptx
+/data/
+/old/
+__pycache__/
+
+### IntelliJ IDEA ###
+/target/
+*.iws
+*.iml
+*.ipr
+*.releaseBackup
+.idea
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+**/bin/
+
+#Gradle
+**/.gradle/
+gradle.properties
+/build/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+.history/
+*.vsix
+
+### Mac OS ###
+.DS_Store

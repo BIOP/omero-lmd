@@ -17,8 +17,7 @@
  * limitations under the License.
  * -----------------------------------------------------------------------------
  *
- * Authors: Benjamin Rothé - EPFL - UPCDA Lab & ChatGPT
- * Reviewer: Rémy Dornier - EPFL - BIOP
+ * Authors: Rémy Dornier - EPFL - BIOP & ChatGPT
  * Inception date: 2026-01-21
  * 
  */

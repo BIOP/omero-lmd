@@ -3,7 +3,7 @@
 *.lnk
 *.pdf
 *.history
-.*pptx
+**/*.pptx
 /data/
 /old/
 __pycache__/

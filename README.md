@@ -77,7 +77,7 @@ pip install omero-py pyqt6 shapely py-lmd>=1.4.0
 
 Follow the [instructions](https://wiki-biop.epfl.ch/en/data-management/omero/file-import) to upload images on OMERO.
 
-> WARNING : If the file to upload are **.vsi** files, please follow those [SPECIAL INSTRUCTIONS](https://wiki-biop.epfl.ch/en/data-management/omero/file-import#special-case-for-vsi-files)
+> WARNING : If the files to upload are **.vsi** files, please follow those [SPECIAL INSTRUCTIONS](https://wiki-biop.epfl.ch/en/data-management/omero/file-import#special-case-for-vsi-files)
 
 
 
@@ -88,9 +88,6 @@ The regions are annotated in QuPath
 - Take the brush tool
 - Annotate the regions
 
-> **Note:** the number of regions to annotate depends on the cell area coverage. A certain amount of cell area should be annotated to be statistically relevant. 
-Thus, for regions which are empty in their center, a doughnut shape has to be drawn. This lead to a Geometry ROI type in QuPath, instead of 
-the standard Polygon ROI type.
 
 Draw as many regions as you need to cut. The regions must be either a `rectangle`, an `ellipse` or a `polygon`.
 Holes are accepted within an annotation i.e. geometry/complex ROI type is accepted
@@ -193,10 +190,6 @@ Each point has to be set in the middle of the `T` branches of the reference poin
 create it and load images from OMERO.
 - Open the image to annotate
 
-> **BE CAREFUL**: When adding the image to the project, DO NOT IMPORT the annotations from OMERO.
-> If previous annotations are already there, please delete them. 
-> You should have a clean image free from any annotations.
-
 **How to create calibration points in QuPath**.
 1. Click on the `Point ROI` tool
 2. In the window, click on `Add`
@@ -214,7 +207,7 @@ create it and load images from OMERO.
 </div>
 
 > **IMPORTANT WARNING**: ONLY POINTS should be sent to OMERO. If you have loaded all the previous annotations from OMERO or created other ones,
-please deleted them from QuPath BEFORE sending the calibration points.
+please select only the 3 calibration points in QuPath BEFORE sending them.
 
 Once points & names are correctly assigned, send those points to OMERO 
 - Go under `Extension -> OMERO -> Send to OMERO -> Send annotations`

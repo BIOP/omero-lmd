@@ -35,11 +35,11 @@ def includeNoneClassObjects = false
 // check the name of the wellID in GitLab
 def mapWellClass = [
     //"null":"A", // for annotations with no class
-    "LTL":"A1-1",
-    "THP":"A2-1",
-    "NCC":"A3-1",
-    "DBA":"A4-1",
-    "Other":"A1-2"
+    "class1":"A1-1",
+    "class2":"A2-1",
+    "class3":"A3-1",
+    "class4":"A4-1",
+    "class5":"A1-2"
 ]
     
 

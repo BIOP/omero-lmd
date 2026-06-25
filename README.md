@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-Apache-brightgreen)](https://github.com/BIOP/omero-lmd/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-BSD--3--Clause-blue)](https://github.com/BIOP/omero-lmd/blob/main/LICENSE)
 
 # OMERO to LMD
 Scripts to convert OMERO shapes, created from QuPath, to LMD readable shapes.

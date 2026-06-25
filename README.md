@@ -122,7 +122,7 @@ You can also assign a name to each region, in order to differentiate them. This 
 The laser cutter on the LMD microscope has a certain diameter of cutting. Thus, it is necessary to expand all the annotations by a certain 
 expansion factor, to be sure to collect all the annotated cells.
 
-- Download the script [border_expansion](QuPath scripts/border_expansion.groovy)
+- Download the script [border_expansion](https://github.com/BIOP/omero-lmd/blob/main/QuPath%20scripts/border_expansion.groovy)
 - Drag and drop the script in QuPath
 - Modify the `expansion_um` variable with the expansion size in micrometer you would like to apply to the annotations.
 - Click on Run
@@ -138,7 +138,7 @@ expansion factor, to be sure to collect all the annotated cells.
 
 ## Assigning a well ID for the LMD microscope
 
-To assign the well ID where you would like the cut to fall into (example: well ID `A` to put the cut in the well `A` ), you can run the script [add_well_ids.groovy](QuPath scripts/add_well_ids.groovy).
+To assign the well ID where you would like the cut to fall into (example: well ID `A` to put the cut in the well `A` ), you can run the script [add_well_ids.groovy](https://github.com/BIOP/omero-lmd/blob/main/QuPath%20scripts/add_well_ids.groovy).
 This script will assign the same well ID for all annotations of the same class.
 - Download the script
 - Drag and drop the script in QuPath
@@ -260,7 +260,7 @@ This section shows the steps to convert OMERO ROIs to LMD readable shapes. Some 
 > - For **WINDOWS** users, open a CONDA/MINIFORGE terminal (also called conda/miniforge prompt)
 
 - Activate the `omero-lmd-env`
-- Run the script [convert_omero_to_lmd_shapes.py](Python scripts/convert_omero_to_lmd_shapes.py)
+- Run the script [convert_omero_to_lmd_shapes.py](https://github.com/BIOP/omero-lmd/blob/main/Python%20scripts/convert_omero_to_lmd_shapes.py)
 
 ```
 conda activate omero-lmd-env

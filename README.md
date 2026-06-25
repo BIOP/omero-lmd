@@ -260,11 +260,11 @@ This section shows the steps to convert OMERO ROIs to LMD readable shapes. Some 
 > - For **WINDOWS** users, open a CONDA/MINIFORGE terminal (also called conda/miniforge prompt)
 
 - Activate the `omero-lmd-env`
-- Run the script `Export_LMD_ROIs.py`
+- Run the script [convert_omero_to_lmd_shapes.py](Python scripts/convert_omero_to_lmd_shapes.py)
 
 ```
 conda activate omero-lmd-env
-python path/to/Export_LMD_ROIs.py
+python path/to/convert_omero_to_lmd_shapes.py
 ```
 > **Warning**: Be careful to not have any space nor accents in your path. If you have some, please remove them.
 

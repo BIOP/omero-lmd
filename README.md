@@ -9,9 +9,12 @@ Scripts to convert OMERO shapes, created from QuPath, to LMD readable shapes.
 
 Author: Rémy Dornier (1)
 
+Contributor: Thibault Courtellemont (2)
+
 **Affiliations**
 
-(1) EPFL BioImaging and Optics Platform (BIOP)
+* (1) EPFL BioImaging and Optics Platform (BIOP)
+* (2) EPFL Proteomics Core Facility (PCF)
 
 ### If you use this script, you should cite the following publication
 

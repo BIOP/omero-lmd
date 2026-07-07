@@ -135,7 +135,7 @@ class MainWindow(QMainWindow):
         tolerance_label.setStyleSheet(FONT_SIZE)
         self.tolerance = QSpinBox()
         self.tolerance.setStyleSheet(FONT_SIZE)
-        self.tolerance.setRange(1, 100)
+        self.tolerance.setRange(1, 500)
         self.tolerance.setValue(10)
         self.tolerance.setSingleStep(1)
         tolerance_widget = QWidget()

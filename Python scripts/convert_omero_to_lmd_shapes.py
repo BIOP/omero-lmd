@@ -4,7 +4,7 @@ Convert OMERO ROIs to a format readable by the Leica Micro-Dissection (LMD) micr
 
 Author : Rémy Dornier - EPFL - BIOP
 Date : 2025-01-10
-Version 1.0.0
+Version 1.0.1
 
 -----------------------------------------------------------------------------
 Copyright (c) 2026 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE, Switzerland, BioImaging And Optics Platform (BIOP)

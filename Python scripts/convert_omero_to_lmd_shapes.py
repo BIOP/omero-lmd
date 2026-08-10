@@ -306,9 +306,8 @@ def run_script(host, username, password, saving_folder, images_url, tolerance):
                         calibration_points.append(path_list)
                     else:
                         shapes.append(path_list)
-
-                    global_idx = n_rect + n_line + n_poly + n_ellipse
-                    shapes_dict[batch_id] = shapes
+                        global_idx = n_rect + n_line + n_poly + n_ellipse
+                        shapes_dict[batch_id] = shapes
 
                 print(f"Converted {n_rect} rectangle(s), {n_ellipse} ellipse(s), {n_line} line(s), "
                       f"{n_point} point(s), {n_poly} polygone(s)/polyline(s)")

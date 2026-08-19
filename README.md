@@ -120,6 +120,20 @@ You can also assign a name to each region, in order to differentiate them. This 
   <img src="resources/region_annotations.png" width="40%">
 </div>
 
+## Measure area
+
+> This is an optional step.
+
+In some cases, the total area of annotated tissue is of importance to cut approximately the same amount of tissue in different conditions.
+- Download the script [Sum_annotation_area_per_class](https://github.com/BIOP/omero-lmd/blob/main/QuPath%20scripts/Sum_annotation_area_per_class.groovy)
+- Drag and drop the script in QuPath
+- Modify the `listOfClass` variable with the different classes attributed to the annotated tissue
+- Click on Run
+
+<div align="center">
+  <img src="resources/sum_area.png" width="70%">
+</div>
+
 ## Expand annotations
 
 The laser cutter on the LMD microscope has a certain diameter of cutting. Thus, it is necessary to expand all the annotations by a certain 

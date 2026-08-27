@@ -65,8 +65,8 @@ println "Expansion distance: ${expansion_um} µm (${expansion_px} px)"
 // ------------------------------------------------------------
 println "Getting annotations..."
 def annotations = processSelectedOnly ?
-        getSelectedObjects().findAll { it instanceof PathAnnotationObject } :
-        getAnnotationObjects()
+        getSelectedObjects().findAll { it.isAnnotation() && it.getROI().isArea() } :
+        getAnnotationObjects().findAll { it.getROI().isArea() }
 
 if (annotations.isEmpty()) {
     println "No annotations found."

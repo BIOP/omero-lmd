@@ -3,7 +3,7 @@
  *
  * Author: Rémy Dornier, EPFL - PTBIOP & ChatGPT
  * Date: 2026-01-21
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * -----------------------------------------------------------------------------
  * Copyright (c) 2026 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE, Switzerland, BioImaging And Optics Platform (BIOP)
@@ -26,6 +26,9 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * -----------------------------------------------------------------------------
+ *
+ * History
+ * 	- 2026.08.27: Fix #2 - don't expand open genmetries -v1.0.1
  * 
  */
 

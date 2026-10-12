@@ -81,16 +81,18 @@ flowchart LR
 ## Script
 
 You need to create a conda environment with the following dependencies:
-- python = 3.11
-- omero-py
-- py-lmd >= 1.4.0 (should come with scikit-image >= 0.19.0. If it is not the case, install scikit-image separately).
-- pyqt6
-- shapely
+- **python = 3.11**
+- **omero-py**, for OMERO communication
+- **py-lmd >= 1.4.0** (should come with scikit-image >= 0.19.0. If it is not the case, install scikit-image separately), 
+to convert polygons to LMD-readable format
+- **pyqt6**, for the UI
+- **shapely**, for shape simplification
+- **scikit-learn**, for shape clustering
 ```
 conda create -n omero-lmd-env python=3.11 pip 
 conda activate omero-lmd-env
 conda install -c conda-forge zeroc-ice==3.6.5
-pip install omero-py pyqt6 shapely py-lmd>=1.4.0
+pip install omero-py pyqt6 shapely scikit-learn py-lmd>=1.4.0
 ```
 
 # Upload images on the OMERO database
@@ -290,12 +292,20 @@ python path/to/convert_omero_to_lmd_shapes.py
 - Enter your OMERO credentials
 - Paste the URL of the images you've copied above
 - Select a destination folder to save xml files.
-- Select a simplification tolerance for polygon shape simplification
+- Choose a simplification tolerance for polygon shape simplification
+
 
 > Note: The LMD software doesn't handle shapes which are defined with more than 500 points. Therefore, for large polygon annotations, 
 > their shape has be to simplified. The tolerance given here is the one used by the [Ramer–Douglas–Peucker algorithm](https://shapely.readthedocs.io/en/stable/reference/shapely.simplify.html),
 > divided by a factor 10
 
+- Choose the maximum distance between two shape centroids to be grouped under the same cluster.
+This parameter has **NO INFLUENCE** on the batch id ; it's only used to sort and group shapes together 
+at the cutting stage.
+
+> Note: In order to avoid dead time at the microscope, due to randomly shape sorting
+> which moves the stage from one corner to another, DBSCAN clustering is used here to group shapes
+> into clusters. Within each cluster, all shapes are then sorted by their centroid coordinates.
 
 - Click OK.
 

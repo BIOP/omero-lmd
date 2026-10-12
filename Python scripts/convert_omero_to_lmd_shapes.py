@@ -46,10 +46,17 @@ from lmd.lib import Collection
 from pathlib import Path
 from PyQt6.QtWidgets import QLineEdit, QLabel, QFileDialog, QPushButton, QMainWindow, QVBoxLayout, \
     QWidget, QApplication, QHBoxLayout, QSpinBox
-
+from sklearn.cluster import DBSCAN
+from operator import itemgetter
+import itertools
 
 FONT_SIZE = 'font-size: 14px'
 DEFAULT_HOST = "omero-server.epfl.ch"
+DEFAULT_USERNAME = ""
+DEFAULT_FOLDER = ""
+DEFAULT_URL = ""
+DEFAULT_CLUSTER = 500 # in um
+DEFAULT_TOLERANCE = 10
 PORT = 4064
 
 
@@ -59,7 +66,7 @@ class MainWindow(QMainWindow):
 
         # main window settings
         self.setWindowTitle("Export ROIs for LMD")
-        self.setMinimumSize(400, 100)
+        self.setMinimumSize(450, 100)
         widgets = []
         main_layout = QVBoxLayout()
 
@@ -81,6 +88,7 @@ class MainWindow(QMainWindow):
         username_label = QLabel("Username")
         username_label.setStyleSheet(FONT_SIZE)
         self.username = QLineEdit()
+        self.username.setText(DEFAULT_USERNAME)
         self.username.setStyleSheet(FONT_SIZE)
         username_widget = QWidget()
         username_layout.addWidget(username_label)
@@ -106,6 +114,7 @@ class MainWindow(QMainWindow):
         image_ids_label = QLabel("Image IDs (URL)")
         image_ids_label.setStyleSheet(FONT_SIZE)
         self.image_ids = QLineEdit()
+        self.image_ids.setText(DEFAULT_URL)
         self.image_ids.setStyleSheet(FONT_SIZE)
         image_ids_widget = QWidget()
         image_ids_layout.addWidget(image_ids_label)
@@ -118,6 +127,7 @@ class MainWindow(QMainWindow):
         folder_label = QLabel("Saving folder")
         folder_label.setStyleSheet(FONT_SIZE)
         self.folder = QLineEdit()
+        self.folder.setText(DEFAULT_FOLDER)
         self.folder.setStyleSheet(FONT_SIZE)
         folder_button = QPushButton(text="Choose")
         folder_button.clicked.connect(self.open_file_chooser)
@@ -136,13 +146,28 @@ class MainWindow(QMainWindow):
         self.tolerance = QSpinBox()
         self.tolerance.setStyleSheet(FONT_SIZE)
         self.tolerance.setRange(1, 500)
-        self.tolerance.setValue(10)
+        self.tolerance.setValue(DEFAULT_TOLERANCE)
         self.tolerance.setSingleStep(1)
         tolerance_widget = QWidget()
         tolerance_layout.addWidget(tolerance_label)
         tolerance_layout.addWidget(self.tolerance)
         tolerance_widget.setLayout(tolerance_layout)
         widgets.append(tolerance_widget)
+
+        # clustering
+        cluster_layout = QHBoxLayout()
+        cluster_label = QLabel("Max distance in um between shapes to cluster them")
+        cluster_label.setStyleSheet(FONT_SIZE)
+        self.cluster = QSpinBox()
+        self.cluster.setStyleSheet(FONT_SIZE)
+        self.cluster.setRange(1, 500)
+        self.cluster.setValue(DEFAULT_CLUSTER)
+        self.cluster.setSingleStep(1)
+        cluster_widget = QWidget()
+        cluster_layout.addWidget(cluster_label)
+        cluster_layout.addWidget(self.cluster)
+        cluster_widget.setLayout(cluster_layout)
+        widgets.append(cluster_widget)
 
         # buttons fields
         button_layout = QHBoxLayout()
@@ -179,15 +204,16 @@ class MainWindow(QMainWindow):
         ids = self.image_ids.text()
         folder = self.folder.text()
         tolerance = self.tolerance.value() / 10
+        dbscan_distance = self.cluster.value()
         self.close()
-        run_script(host, username, password, folder, ids, tolerance)
+        run_script(host, username, password, folder, ids, tolerance, dbscan_distance)
 
     def open_file_chooser(self):
         response = QFileDialog.getExistingDirectory(parent=self, caption="select a folder", directory=os.getcwd())
         self.folder.setText(str(response))
 
 
-def run_script(host, username, password, saving_folder, images_url, tolerance):
+def run_script(host, username, password, saving_folder, images_url, tolerance, dbscan_distance):
     """
     Extract ROIs from OMERO and convert them to LMD-readable shapes via a xml file.
 
@@ -205,7 +231,8 @@ def run_script(host, username, password, saving_folder, images_url, tolerance):
         OMERO URL of images to process
     tolerance: float
         tolerance for polygon simplification
-
+    dbscan_distance: float
+        maximum distance between the centroid of two shapes to be considered as part of the same cluster
     """
 
     # check that saving folder exists
@@ -226,6 +253,8 @@ def run_script(host, username, password, saving_folder, images_url, tolerance):
             for image_id in ids:
                 image_wrapper = conn.getObject("Image", image_id)
                 image_name = image_wrapper.getName()
+                image_width = image_wrapper.getSizeX() * image_wrapper.getPixelSizeX()  # in um, to be coherent with QuPath shape centroid
+
                 print(f"**** Working on image '{image_name}':{image_id} ****")
                 print(f"Extracting ROIs...")
                 result = roi_service.findByImage(image_id, None, conn.SERVICE_OPTS)
@@ -247,10 +276,16 @@ def run_script(host, username, password, saving_folder, images_url, tolerance):
                 # filter only one shape per complex roi i.e. the one with maximum area
                 roi_dict = filter_max_area_rois(result)
 
+                print(f"Clustering and sorting shapes...")
+                # sort shapes to centroids
+                sorted_shape_ids = sort_shapes_by_position(roi_dict, roi_df, image_width, dbscan_distance)
+
                 # convert omero shapes to list of points
                 # extract calibration points
                 print(f"Converting omero shapes to lmd-readable shapes...")
-                for shape_id, s in roi_dict.items() :
+                for shape_id in list(itertools.chain.from_iterable(sorted_shape_ids)):
+                    s = roi_dict.get(shape_id)
+
                     # retrieve information about the current shape
                     row_df = roi_df[roi_df["Object ID"] == shape_id]
 
@@ -333,6 +368,78 @@ def run_script(host, username, password, saving_folder, images_url, tolerance):
         finally:
             conn.close()
             print(f"Disconnected from {host}")
+
+
+
+
+def sort_shapes_by_position(roi_dict, roi_df, image_width, dbscan_distance):
+    """
+    Group shapes by cluster using DBSCAN, and sort all shapes by cluster and by centroid coordinates.
+
+    Parameters
+    ----------
+    roi_dict: dict
+        QuPath shape ID mapped with OMERO shape
+    roi_df: DataFrame
+        QuPath metrics for each OMERO shape
+    image_width: int
+        Image width in um
+    dbscan_distance: float
+        maximum distance between the centroid of two shapes to be considered as part of the same cluster
+
+    Returns list
+        Sorted shape ids grouped by cluster list
+    -------
+
+    """
+    # get the list of all shape centroid coordinates, mapped with the corresponding shape id
+    centroid_list = []
+    for shape_id, s in roi_dict.items() :
+        row_df = roi_df[roi_df["Object ID"] == shape_id]
+        centroid_coord = [int(row_df['Centroid X µm'].item()), int(row_df['Centroid Y µm'].item())]
+        centroid_list.append((centroid_coord, shape_id))
+
+    # cluster all shapes based on their centroid
+    clustering = DBSCAN(eps=dbscan_distance, min_samples=1).fit(np.array([x[0] for x in centroid_list]))
+    shape_cluster = clustering.labels_
+
+    # get all unique clusters => should never be -1, as we allow for one-shaped cluster
+    unique_labels = np.unique(shape_cluster)
+
+    cluster_centroid_list = []
+    for label in unique_labels:
+        # get the list of centroids coming from the current cluster
+        shape_centroids_in_cluster_list = [c for c, l in zip(centroid_list, shape_cluster) if l == label]
+
+        # get the centroid of the cluster and computes its 1d coordinate
+        averaged_coordinates = np.average(np.array([x[0] for x in shape_centroids_in_cluster_list]), axis=0)
+        if averaged_coordinates[1] % 2 == 0:
+            averaged_coordinates_1d = averaged_coordinates[0] + averaged_coordinates[1] * image_width
+        else:
+            averaged_coordinates_1d = (image_width - averaged_coordinates[0]) + averaged_coordinates[1] * image_width
+
+        # compute the 1d coordinate of each shape centroid
+        all_shape_info_list = []
+        for centroid_tuple in shape_centroids_in_cluster_list:
+            centroid = centroid_tuple[0]
+            if centroid[1] % 2 == 0:
+                centroid_1d = centroid[0] + centroid[1]*image_width
+            else:
+                centroid_1d = (image_width - centroid[0]) + centroid[1]*image_width
+
+            all_shape_info_list.append((centroid_tuple[1], centroid, centroid_1d))
+
+        # sort shapes centroid and get the ordered list of shape ids
+        all_shape_info_list = sorted(all_shape_info_list, key=lambda x: x[2])
+        sorted_shape_ids = list(map(itemgetter(0), all_shape_info_list))
+
+        cluster_centroid_list.append((int(averaged_coordinates_1d), sorted_shape_ids))
+
+    # sort clusters centroid
+    cluster_centroid_list = sorted(cluster_centroid_list, key=lambda x: x[0])
+
+    # ordered shape ids
+    return [x[1] for x in cluster_centroid_list]
 
 
 def compute_shape_path(s, well_id, shape_name, classification, global_idx, tolerance):

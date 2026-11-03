@@ -1,9 +1,16 @@
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue)](https://github.com/BIOP/omero-lmd/blob/main/LICENSE)
+[![DOI](https://zenodo.org/badge/1196111687.svg)](https://doi.org/10.5281/zenodo.23911028)
 
 # OMERO to LMD
 Scripts to convert OMERO shapes, created from QuPath, to LMD readable shapes.
 
 # Citing
+
+Please cite those scripts by linking them to this GitHub or to the release you used, and to the following Zenodo entry
+
+https://doi.org/10.5281/zenodo.23911028
+
+Feel free to also give us a star ⭐️ !
 
 ### Code authorship
 
